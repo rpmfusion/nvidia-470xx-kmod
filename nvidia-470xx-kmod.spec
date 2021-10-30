@@ -10,9 +10,9 @@
 
 Name:          nvidia-470xx-kmod
 Epoch:         3
-Version:       470.74
+Version:       470.82.00
 # Taken over by kmodtool
-Release:       2%{?dist}
+Release:       1%{?dist}
 
 License:       Redistributable, no modification permitted
 Summary:       NVIDIA 470xx display driver kernel module
@@ -73,6 +73,9 @@ done
 %{?akmod_install}
 
 %changelog
+* Sat Oct 30 2021 Vitaly Zaitsev <vitaly@easycoding.org> - 3:470.82.00-1
+- Updated to version 470.82.00.
+
 * Fri Oct 29 2021 Vitaly Zaitsev <vitaly@easycoding.org> - 3:470.74-2
 - Extracted to a separate legacy LTS branch.
 
