@@ -10,7 +10,7 @@
 
 Name:          nvidia-470xx-kmod
 Epoch:         3
-Version:       470.94
+Version:       470.103.01
 # Taken over by kmodtool
 Release:       1%{?dist}
 
@@ -73,6 +73,9 @@ done
 %{?akmod_install}
 
 %changelog
+* Tue Feb 01 2022 Vitaly Zaitsev <vitaly@easycoding.org> - 3:470.103.01-1
+- Updated to version 470.103.01.
+
 * Mon Dec 13 2021 Vitaly Zaitsev <vitaly@easycoding.org> - 3:470.94-1
 - Updated to version 470.94.
 
