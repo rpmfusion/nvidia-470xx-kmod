@@ -12,7 +12,7 @@ Name:          nvidia-470xx-kmod
 Epoch:         3
 Version:       470.141.03
 # Taken over by kmodtool
-Release:       1%{?dist}
+Release:       2%{?dist}
 
 License:       Redistributable, no modification permitted
 Summary:       NVIDIA 470xx display driver kernel module
@@ -73,6 +73,10 @@ done
 %{?akmod_install}
 
 %changelog
+* Mon Aug 08 2022 RPM Fusion Release Engineering <sergiomb@rpmfusion.org> - 3:470.141.03-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_37_Mass_Rebuild and ffmpeg
+  5.1
+
 * Tue Aug 02 2022 Vitaly Zaitsev <vitaly@easycoding.org> - 3:470.141.03-1
 - Updated to version 470.141.03.
 
