@@ -4,15 +4,15 @@ Date: Wed, 19 Oct 2022 00:14:36 +0200
 Subject: [PATCH] backport get_task_ioprio changes from 510.85.02
 
 ---
- conftest.sh          | 17 +++++++++++++++++
- nvidia/nv.c          | 12 ++++++++++++
- nvidia/nvidia.Kbuild |  1 +
+ kernel/conftest.sh          | 17 +++++++++++++++++
+ kernel/nvidia/nv.c          | 12 ++++++++++++
+ kernel/nvidia/nvidia.Kbuild |  1 +
  3 files changed, 30 insertions(+)
 
-diff --git a/conftest.sh b/conftest.sh
+diff --git a/kernel/conftest.sh b/kernel/conftest.sh
 index f3fd14b..4789bd5 100755
---- a/conftest.sh
-+++ b/conftest.sh
+--- a/kernel/conftest.sh
++++ b/kernel/conftest.sh
 @@ -4817,6 +4817,23 @@ compile_test() {
              compile_check_conftest "$CODE" "NV_RESERVATION_OBJECT_RESERVE_SHARED_HAS_NUM_FENCES_ARG" "" "types"
          ;;
@@ -39,8 +39,8 @@ index f3fd14b..4789bd5 100755
          #
 diff --git a/nvidia/nv.c b/nvidia/nv.c
 index 02cc245..2475b96 100644
---- a/nvidia/nv.c
-+++ b/nvidia/nv.c
+--- a/kernel/nvidia/nv.c
++++ b/kernel/nvidia/nv.c
 @@ -5438,7 +5438,19 @@ NvBool NV_API_CALL nv_s2idle_pm_configured(void)
          return NV_FALSE;
      }
@@ -63,8 +63,8 @@ index 02cc245..2475b96 100644
  
 diff --git a/nvidia/nvidia.Kbuild b/nvidia/nvidia.Kbuild
 index f1d9b3f..e3c6b1f 100644
---- a/nvidia/nvidia.Kbuild
-+++ b/nvidia/nvidia.Kbuild
+--- a/kernel/nvidia/nvidia.Kbuild
++++ b/kernel/nvidia/nvidia.Kbuild
 @@ -170,6 +170,7 @@ NV_CONFTEST_FUNCTION_COMPILE_TESTS += drm_gem_object_put_unlocked
  NV_CONFTEST_FUNCTION_COMPILE_TESTS += set_close_on_exec
  NV_CONFTEST_FUNCTION_COMPILE_TESTS += dma_set_coherent_mask

@@ -4,13 +4,13 @@ Date: Mon, 17 Oct 2022 03:35:02 +0200
 Subject: [PATCH] backport drm_frambuffer.h changes from 515.76
 
 ---
- nvidia-drm/nvidia-drm-helper.c | 13 +++++++++++++
+ kernel/nvidia-drm/nvidia-drm-helper.c | 13 +++++++++++++
  1 file changed, 13 insertions(+)
 
 diff --git a/nvidia-drm/nvidia-drm-helper.c b/nvidia-drm/nvidia-drm-helper.c
 index 3831180..8fc8620 100644
---- a/nvidia-drm/nvidia-drm-helper.c
-+++ b/nvidia-drm/nvidia-drm-helper.c
+--- a/kernel/nvidia-drm/nvidia-drm-helper.c
++++ b/kernel/nvidia-drm/nvidia-drm-helper.c
 @@ -41,6 +41,19 @@
  #include <drm/drm_atomic_uapi.h>
  #endif

@@ -4,16 +4,16 @@ Date: Tue, 18 Oct 2022 22:32:41 +0200
 Subject: [PATCH] backport acpi changes from 510.85.02
 
 ---
- common/inc/nv-linux.h |  12 --
- common/inc/nv-proto.h |   2 -
- nvidia/nv-acpi.c      | 443 ------------------------------------------
- nvidia/nv.c           |  16 --
+ kernel/common/inc/nv-linux.h |  12 --
+ kernel/common/inc/nv-proto.h |   2 -
+ kernel/nvidia/nv-acpi.c      | 443 ------------------------------------------
+ kernel/nvidia/nv.c           |  16 --
  4 files changed, 473 deletions(-)
 
-diff --git a/common/inc/nv-linux.h b/common/inc/nv-linux.h
+diff --git a/kernel/common/inc/nv-linux.h b/kernel/common/inc/nv-linux.h
 index 51a973b..22b05a0 100644
---- a/common/inc/nv-linux.h
-+++ b/common/inc/nv-linux.h
+--- a/kernel/common/inc/nv-linux.h
++++ b/kernel/common/inc/nv-linux.h
 @@ -1627,24 +1627,12 @@ extern NvBool nv_ats_supported;
   * and any other baggage we want to carry along
   *
@@ -39,10 +39,10 @@ index 51a973b..22b05a0 100644
  } nv_acpi_t;
  
  #endif
-diff --git a/common/inc/nv-proto.h b/common/inc/nv-proto.h
+diff --git a/kernel/common/inc/nv-proto.h b/kernel/common/inc/nv-proto.h
 index 79cccfa..aa8b285 100644
---- a/common/inc/nv-proto.h
-+++ b/common/inc/nv-proto.h
+--- a/kernel/common/inc/nv-proto.h
++++ b/kernel/common/inc/nv-proto.h
 @@ -22,8 +22,6 @@ extern nvidia_module_t nv_fops;
  
  void        nv_acpi_register_notifier   (nv_linux_state_t *);
@@ -52,10 +52,10 @@ index 79cccfa..aa8b285 100644
  
  NvU8        nv_find_pci_capability      (struct pci_dev *, NvU8);
  void *      nv_alloc_file_private       (void);
-diff --git a/nvidia/nv-acpi.c b/nvidia/nv-acpi.c
+diff --git a/kernel/nvidia/nv-acpi.c b/kernel/nvidia/nv-acpi.c
 index 2b7b988..dcad96c 100644
---- a/nvidia/nv-acpi.c
-+++ b/nvidia/nv-acpi.c
+--- a/kernel/nvidia/nv-acpi.c
++++ b/kernel/nvidia/nv-acpi.c
 @@ -22,35 +22,13 @@ static NV_STATUS   nv_acpi_extract_buffer  (const union acpi_object *, void *, N
  static NV_STATUS   nv_acpi_extract_package (const union acpi_object *, void *, NvU32, NvU32 *);
  static NV_STATUS   nv_acpi_extract_object  (const union acpi_object *, void *, NvU32, NvU32 *);
@@ -569,10 +569,10 @@ index 2b7b988..dcad96c 100644
  void NV_API_CALL nv_acpi_methods_init(NvU32 *handlePresent)
  {
      *handlePresent = 0;
-diff --git a/nvidia/nv.c b/nvidia/nv.c
+diff --git a/kernel/nvidia/nv.c b/kernel/nvidia/nv.c
 index 2475b96..13d2614 100644
---- a/nvidia/nv.c
-+++ b/nvidia/nv.c
+--- a/kernel/nvidia/nv.c
++++ b/kernel/nvidia/nv.c
 @@ -2694,7 +2694,6 @@ nvidia_ctl_open(
      nv_linux_state_t *nvl = &nv_ctl_device;
      nv_state_t *nv = NV_STATE_PTR(nvl);

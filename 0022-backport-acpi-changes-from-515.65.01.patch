@@ -4,13 +4,13 @@ Date: Mon, 17 Oct 2022 03:03:00 +0200
 Subject: [PATCH] backport acpi changes from 515.65.01
 
 ---
- nvidia/nv-acpi.c | 65 +++++++++++++-----------------------------------
+ kernel/nvidia/nv-acpi.c | 65 +++++++++++++-----------------------------------
  1 file changed, 17 insertions(+), 48 deletions(-)
 
-diff --git a/nvidia/nv-acpi.c b/nvidia/nv-acpi.c
+diff --git a/kernel/nvidia/nv-acpi.c b/kernel/nvidia/nv-acpi.c
 index dcad96c..4ec227c 100644
---- a/nvidia/nv-acpi.c
-+++ b/nvidia/nv-acpi.c
+--- a/kernel/nvidia/nv-acpi.c
++++ b/kernel/nvidia/nv-acpi.c
 @@ -681,12 +681,11 @@ NV_STATUS NV_API_CALL nv_acpi_ddc_method(
  )
  {
