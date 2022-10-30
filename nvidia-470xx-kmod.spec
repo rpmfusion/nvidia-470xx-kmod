@@ -12,13 +12,18 @@ Name:          nvidia-470xx-kmod
 Epoch:         3
 Version:       470.141.03
 # Taken over by kmodtool
-Release:       2%{?dist}
+Release:       3%{?dist}
 
 License:       Redistributable, no modification permitted
 Summary:       NVIDIA 470xx display driver kernel module
 URL:           https://www.nvidia.com/
 
 Source11:      nvidia-470xx-kmodtool-excludekernel-filterfile
+
+Patch20:       0020-backport-get_task_ioprio-changes-from-510.85.02.patch
+Patch21:       0021-backport-acpi-changes-from-510.85.02.patch
+Patch22:       0022-backport-acpi-changes-from-515.65.01.patch
+Patch23:       0023-backport-drm_frambuffer.h-changes-from-515.76.patch
 
 # needed for plague to make sure it builds for i586 and i686
 ExclusiveArch:  x86_64
@@ -42,6 +47,10 @@ kmodtool  --target %{_target_cpu}  --repo rpmfusion --kmodname %{name} --filterf
 %setup -T -c
 tar --use-compress-program xz -xf %{_datadir}/%{name}-%{version}/%{name}-%{version}-%{_target_cpu}.tar.xz
 # patch loop
+%patch20 -p1
+%patch21 -p1
+%patch22 -p1
+%patch23 -p1
 
 for kernel_version  in %{?kernel_versions} ; do
     cp -a kernel _kmod_build_${kernel_version%%___*}
@@ -73,6 +82,9 @@ done
 %{?akmod_install}
 
 %changelog
+* Sun Oct 30 2022 Vitaly Zaitsev <vitaly@easycoding.org> - 3:470.141.03-3
+- Added backported Debian patches for the Linux kernel 6.0.
+
 * Mon Aug 08 2022 RPM Fusion Release Engineering <sergiomb@rpmfusion.org> - 3:470.141.03-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_37_Mass_Rebuild and ffmpeg
   5.1
