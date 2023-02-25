@@ -12,13 +12,15 @@ Name:          nvidia-470xx-kmod
 Epoch:         3
 Version:       470.161.03
 # Taken over by kmodtool
-Release:       1%{?dist}
+Release:       2%{?dist}
 
 License:       Redistributable, no modification permitted
 Summary:       NVIDIA 470xx display driver kernel module
 URL:           https://www.nvidia.com/
 
 Source11:      nvidia-470xx-kmodtool-excludekernel-filterfile
+
+Patch20:       nvidia-470xx-linux-6.2-build-fixes.patch
 
 # needed for plague to make sure it builds for i586 and i686
 ExclusiveArch:  x86_64
@@ -42,6 +44,7 @@ kmodtool  --target %{_target_cpu}  --repo rpmfusion --kmodname %{name} --filterf
 %setup -T -c
 tar --use-compress-program xz -xf %{_datadir}/%{name}-%{version}/%{name}-%{version}-%{_target_cpu}.tar.xz
 # patch loop
+%patch20 -p1
 
 for kernel_version  in %{?kernel_versions} ; do
     cp -a kernel _kmod_build_${kernel_version%%___*}
@@ -73,6 +76,9 @@ done
 %{?akmod_install}
 
 %changelog
+* Sat Feb 25 2023 Vitaly Zaitsev <vitaly@easycoding.org> - 3:470.161.03-2
+- Added patch for the Linux kernel 6.2 support.
+
 * Tue Nov 29 2022 Vitaly Zaitsev <vitaly@easycoding.org> - 3:470.161.03-1
 - Updated to version 470.161.03.
 
