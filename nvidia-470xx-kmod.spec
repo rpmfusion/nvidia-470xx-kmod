@@ -10,20 +10,15 @@
 
 Name:          nvidia-470xx-kmod
 Epoch:         3
-Version:       470.199.02
+Version:       470.223.02
 # Taken over by kmodtool
-Release:       3%{?dist}
+Release:       1%{?dist}
 
 License:       Redistributable, no modification permitted
 Summary:       NVIDIA 470xx display driver kernel module
 URL:           https://www.nvidia.com/
 
 Source11:      nvidia-470xx-kmodtool-excludekernel-filterfile
-
-# Patches from ubuntu
-# https://git.launchpad.net/ubuntu/+source/nvidia-graphics-drivers-470/tree/debian/dkms_nvidia/patches?h=applied/ubuntu/devel
-Patch0:        buildfix_kernel_6.5-get_user_pages-dropped-vmas-arg.patch
-Patch1:        buildfix_kernel_6.5-get_user_pages_remote-dropped-vmas-arg.patch
 
 # needed for plague to make sure it builds for i586 and i686
 ExclusiveArch:  x86_64
@@ -47,10 +42,6 @@ kmodtool  --target %{_target_cpu}  --repo rpmfusion --kmodname %{name} --filterf
 %setup -T -c
 tar --use-compress-program xz -xf %{_datadir}/%{name}-%{version}/%{name}-%{version}-%{_target_cpu}.tar.xz
 # patch loop
-pushd kernel
-%patch 0 -p1
-%patch 1 -p1
-popd
 
 for kernel_version  in %{?kernel_versions} ; do
     cp -a kernel _kmod_build_${kernel_version%%___*}
@@ -82,6 +73,9 @@ done
 %{?akmod_install}
 
 %changelog
+* Wed Nov 01 2023 Leigh Scott <leigh123linux@gmail.com> - 3:470.223.02-1
+- Update to 470.223.02
+
 * Wed Sep 06 2023 orphan <orphan@rpmfusion.org> - 3:470.199.02-3
 - Fix for F39 branch
 
