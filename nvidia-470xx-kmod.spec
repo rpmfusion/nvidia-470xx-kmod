@@ -10,16 +10,16 @@
 
 Name:          nvidia-470xx-kmod
 Epoch:         3
-Version:       470.223.02
+Version:       470.239.06
 # Taken over by kmodtool
-Release:       2%{?dist}
+Release:       1%{?dist}
 
 License:       Redistributable, no modification permitted
 Summary:       NVIDIA 470xx display driver kernel module
 URL:           https://www.nvidia.com/
 
 Source11:      nvidia-470xx-kmodtool-excludekernel-filterfile
-Patch0:        kernel-6.7.3.patch
+Patch0:        gcc-14.patch
 
 # needed for plague to make sure it builds for i586 and i686
 ExclusiveArch:  x86_64
@@ -42,7 +42,6 @@ The nvidia 470xx %{version} display driver kernel module for kernel %{kversion}.
 kmodtool  --target %{_target_cpu}  --repo rpmfusion --kmodname %{name} --filterfile %{SOURCE11} --obsolete-name nvidia-newest --obsolete-version "%{?epoch}:%{version}-%{release}" %{?buildforkernels:--%{buildforkernels}} %{?kernels:--for-kernels "%{?kernels}"} 2>/dev/null
 %setup -T -c
 tar --use-compress-program xz -xf %{_datadir}/%{name}-%{version}/%{name}-%{version}-%{_target_cpu}.tar.xz
-# patch loop
 %patch -P0 -p1
 for kernel_version  in %{?kernel_versions} ; do
     cp -a kernel _kmod_build_${kernel_version%%___*}
@@ -74,6 +73,9 @@ done
 %{?akmod_install}
 
 %changelog
+* Mon Apr 15 2024 Sérgio Basto <sergio@serjux.com> - 3:470.239.06-1
+- Update nvidia-470xx-kmod to 470.239.06
+
 * Thu Feb 01 2024 Leigh Scott <leigh123linux@gmail.com> - 3:470.223.02-2
 - fix build with kernel-6.7.3
 

@@ -1,0 +1,25 @@
+diff -Naur a/kernel/conftest.sh b/kernel/conftest.sh
+--- a/kernel/conftest.sh
++++ b/kernel/conftest.sh
+@@ -101,7 +101,8 @@
+ build_cflags() {
+     BASE_CFLAGS="-O2 -D__KERNEL__ \
+ -DKBUILD_BASENAME=\"#conftest$$\" -DKBUILD_MODNAME=\"#conftest$$\" \
+--nostdinc -isystem $ISYSTEM"
++-nostdinc -isystem $ISYSTEM \
++-Wno-implicit-function-declaration -Wno-strict-prototypes -Wno-incompatible-pointer-types"
+ 
+     if [ "$OUTPUT" != "$SOURCES" ]; then
+         OUTPUT_CFLAGS="-I$OUTPUT/include2 -I$OUTPUT/include"
+diff -Naur a/kernel/common/inc/nv-linux.h b/kernel/common/inc/nv-linux.h
+--- a/kernel/common/inc/nv-linux.h
++++ b/kernel/common/inc/nv-linux.h
+@@ -236,7 +236,7 @@
+ #error "NV_EFI_ENABLED_ARGUMENT_COUNT value unrecognized!"
+ #endif
+ #elif (defined(NV_EFI_ENABLED_PRESENT) || defined(efi_enabled))
+-#define NV_EFI_ENABLED() efi_enabled
++#define NV_EFI_ENABLED() ((int)efi_enabled)
+ #else
+ #define NV_EFI_ENABLED() 0
+ #endif
