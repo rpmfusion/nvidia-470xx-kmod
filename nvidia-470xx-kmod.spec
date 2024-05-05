@@ -12,7 +12,7 @@ Name:          nvidia-470xx-kmod
 Epoch:         3
 Version:       470.239.06
 # Taken over by kmodtool
-Release:       1%{?dist}
+Release:       2%{?dist}
 
 License:       Redistributable, no modification permitted
 Summary:       NVIDIA 470xx display driver kernel module
@@ -20,6 +20,7 @@ URL:           https://www.nvidia.com/
 
 Source11:      nvidia-470xx-kmodtool-excludekernel-filterfile
 Patch0:        gcc-14.patch
+Patch1:        nvidia-UBSAN.patch
 
 # needed for plague to make sure it builds for i586 and i686
 ExclusiveArch:  x86_64
@@ -43,6 +44,7 @@ kmodtool  --target %{_target_cpu}  --repo rpmfusion --kmodname %{name} --filterf
 %setup -T -c
 tar --use-compress-program xz -xf %{_datadir}/%{name}-%{version}/%{name}-%{version}-%{_target_cpu}.tar.xz
 %patch -P0 -p1
+%patch -P1 -p1
 for kernel_version  in %{?kernel_versions} ; do
     cp -a kernel _kmod_build_${kernel_version%%___*}
 done
@@ -73,6 +75,9 @@ done
 %{?akmod_install}
 
 %changelog
+* Sun May 05 2024 Giannis Kapetanakis <bilias@edu.physics.uoc.gr> - 3:470.239.06-2
+- Disable Undefined Behavior Sanitizer - UBSAN
+
 * Mon Apr 15 2024 Sérgio Basto <sergio@serjux.com> - 3:470.239.06-1
 - Update nvidia-470xx-kmod to 470.239.06
 
