@@ -10,9 +10,9 @@
 
 Name:          nvidia-470xx-kmod
 Epoch:         3
-Version:       470.239.06
+Version:       470.256.02
 # Taken over by kmodtool
-Release:       2%{?dist}
+Release:       1%{?dist}
 
 License:       Redistributable, no modification permitted
 Summary:       NVIDIA 470xx display driver kernel module
@@ -75,6 +75,9 @@ done
 %{?akmod_install}
 
 %changelog
+* Thu Jun 06 2024 Sérgio Basto <sergio@serjux.com> - 3:470.256.02-1
+- Update nvidia-470xx-kmod to 470.256.02
+
 * Sun May 05 2024 Giannis Kapetanakis <bilias@edu.physics.uoc.gr> - 3:470.239.06-2
 - Disable Undefined Behavior Sanitizer - UBSAN
 
