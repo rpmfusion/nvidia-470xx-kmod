@@ -12,7 +12,7 @@ Name:          nvidia-470xx-kmod
 Epoch:         3
 Version:       470.256.02
 # Taken over by kmodtool
-Release:       2%{?dist}
+Release:       3%{?dist}
 
 License:       Redistributable, no modification permitted
 Summary:       NVIDIA 470xx display driver kernel module
@@ -21,6 +21,7 @@ URL:           https://www.nvidia.com/
 Source11:      nvidia-470xx-kmodtool-excludekernel-filterfile
 Patch0:        gcc-14.patch
 Patch1:        nvidia-UBSAN.patch
+Patch2:        kernel-610-buildfix.patch
 
 # needed for plague to make sure it builds for i586 and i686
 ExclusiveArch:  x86_64
@@ -45,6 +46,7 @@ kmodtool  --target %{_target_cpu}  --repo rpmfusion --kmodname %{name} --filterf
 tar --use-compress-program xz -xf %{_datadir}/%{name}-%{version}/%{name}-%{version}-%{_target_cpu}.tar.xz
 %patch -P0 -p1
 %patch -P1 -p1
+%patch -P2 -p1 -d kernel/
 for kernel_version  in %{?kernel_versions} ; do
     cp -a kernel _kmod_build_${kernel_version%%___*}
 done
@@ -75,6 +77,9 @@ done
 %{?akmod_install}
 
 %changelog
+* Tue Aug 13 2024 Leigh Scott <leigh123linux@gmail.com> - 3:470.256.02-3
+- Add debian build fixes for kernel-6.10
+
 * Sat Aug 03 2024 RPM Fusion Release Engineering <sergiomb@rpmfusion.org> - 3:470.256.02-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_41_Mass_Rebuild
 
