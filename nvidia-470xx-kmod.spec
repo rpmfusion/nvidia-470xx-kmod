@@ -12,7 +12,7 @@ Name:          nvidia-470xx-kmod
 Epoch:         3
 Version:       470.256.02
 # Taken over by kmodtool
-Release:       4%{?dist}
+Release:       5%{?dist}
 
 License:       Redistributable, no modification permitted
 Summary:       NVIDIA 470xx display driver kernel module
@@ -25,6 +25,8 @@ Patch2:        0037-import-pfn_valid-w-o-GPL-rcu_read_lock-unlock-from-v.patch
 Patch3:        0043-backport-follow_pfn-changes-from-550.90.07.patch
 Patch4:        0045-let-the-virt_addr_valid-macro-use-nv_pfn_valid-on-pp.patch
 Patch5:        0046-backport-nv_get_kern_phys_address-changes-from-555.4.patch
+Patch6:        kernel-612-buildfix.patch
+Patch7:        kernel-612_runtime_fix.patch
 
 # needed for plague to make sure it builds for i586 and i686
 ExclusiveArch:  x86_64
@@ -53,6 +55,8 @@ tar --use-compress-program xz -xf %{_datadir}/%{name}-%{version}/%{name}-%{versi
 %patch -P3 -p1 -d kernel/
 %patch -P4 -p1 -d kernel/
 %patch -P5 -p1 -d kernel/
+%patch -P6 -p1 -d kernel/
+%patch -P7 -p1
 
 for kernel_version  in %{?kernel_versions} ; do
     cp -a kernel _kmod_build_${kernel_version%%___*}
@@ -84,6 +88,9 @@ done
 %{?akmod_install}
 
 %changelog
+* Fri Dec 13 2024 Leigh Scott <leigh123linux@gmail.com> - 3:470.256.02-5
+- Add patches to fix kernel-6.12 build and runtime issues
+
 * Sun Nov 10 2024 Sérgio Basto <sergio@serjux.com> - 3:470.256.02-4
 - Update Debian patches
 
