@@ -12,7 +12,7 @@ Name:          nvidia-470xx-kmod
 Epoch:         3
 Version:       470.256.02
 # Taken over by kmodtool
-Release:       6%{?dist}
+Release:       7%{?dist}
 
 License:       Redistributable, no modification permitted
 Summary:       NVIDIA 470xx display driver kernel module
@@ -21,12 +21,24 @@ URL:           https://www.nvidia.com/
 Source11:      nvidia-470xx-kmodtool-excludekernel-filterfile
 Patch0:        gcc-14.patch
 Patch1:        nvidia-UBSAN.patch
-Patch2:        0037-import-pfn_valid-w-o-GPL-rcu_read_lock-unlock-from-v.patch
-Patch3:        0043-backport-follow_pfn-changes-from-550.90.07.patch
-Patch4:        0045-let-the-virt_addr_valid-macro-use-nv_pfn_valid-on-pp.patch
-Patch5:        0046-backport-nv_get_kern_phys_address-changes-from-555.4.patch
-Patch6:        kernel-612-buildfix.patch
-Patch7:        kernel-612_runtime_fix.patch
+Patch37:       0037-import-pfn_valid-w-o-GPL-rcu_read_lock-unlock-from-v.patch
+Patch43:       0043-backport-follow_pfn-changes-from-550.90.07.patch
+Patch45:       0045-let-the-virt_addr_valid-macro-use-nv_pfn_valid-on-pp.patch
+Patch46:       0046-backport-nv_get_kern_phys_address-changes-from-555.4.patch
+Patch47:       0047-backport-drm_output_poll_changed-changes-from-535.21.patch
+Patch48:       0048-backport-cmd_symlink-changes-from-550.142.patch
+Patch49:       0049-backport-uvm-warning-fixes-from-510.39.01.patch
+Patch491:      0049-backport-warning-fixes-from-525.53.patch
+Patch50:       0050-backport-uvm-warning-fixes-from-535.146.02.patch
+Patch51:       0051-backport-warning-fixes-from-535.216.01.patch
+Patch52:       0052-backport-uvm-warning-fixes-from-560.28.03.patch
+Patch53:       0053-fix-more-warnings.patch
+Patch54:       0054-fix-more-uvm-warnings.patch
+Patch55:       0055-backport-file_operations_fop_unsigned_offset_present.patch
+Patch56:       0056-backport-LD_SCRIPT-changes-from-535.230.02.patch
+Patch57:       0057-backport-uvm-fixes-from-535.230.02.patch
+Patch58:       0058-backport-warning-fixes-from-565.57.01.patch
+Patch59:       0059-backport-uvm-warning-fixes-from-550.90.07.patch
 
 # needed for plague to make sure it builds for i586 and i686
 ExclusiveArch:  x86_64
@@ -49,14 +61,61 @@ The nvidia 470xx %{version} display driver kernel module for kernel %{kversion}.
 kmodtool  --target %{_target_cpu}  --repo rpmfusion --kmodname %{name} --filterfile %{SOURCE11} --obsolete-name nvidia-newest --obsolete-version "%{?epoch}:%{version}-%{release}" %{?buildforkernels:--%{buildforkernels}} %{?kernels:--for-kernels "%{?kernels}"} 2>/dev/null
 %setup -T -c
 tar --use-compress-program xz -xf %{_datadir}/%{name}-%{version}/%{name}-%{version}-%{_target_cpu}.tar.xz
+
+# cc_version_check-gcc5.patch
+# bashisms.patch
+
+# # kernel support
+# 0001-some-power-management-features-were-not-yet-in-Linux.patch
+# 0033-refuse-to-load-legacy-module-if-IBT-is-enabled.patch
+# 0034-fix-typos.patch
+# 0037-import-pfn_valid-w-o-GPL-rcu_read_lock-unlock-from-v.patch
+# 0042-Log-an-error-message-when-nv_mem_client_init-fails-d.patch
+# 0043-backport-follow_pfn-changes-from-550.90.07.patch
+# 0045-let-the-virt_addr_valid-macro-use-nv_pfn_valid-on-pp.patch
+# 0046-backport-nv_get_kern_phys_address-changes-from-555.4.patch
+# 0047-backport-drm_output_poll_changed-changes-from-535.21.patch
+# 0048-backport-cmd_symlink-changes-from-550.142.patch
+# 0049-backport-uvm-warning-fixes-from-510.39.01.patch
+# 0049-backport-warning-fixes-from-525.53.patch
+# 0050-backport-uvm-warning-fixes-from-535.146.02.patch
+# 0051-backport-warning-fixes-from-535.216.01.patch
+# 0052-backport-uvm-warning-fixes-from-560.28.03.patch
+# 0053-fix-more-warnings.patch
+# 0054-fix-more-uvm-warnings.patch
+# 0055-backport-file_operations_fop_unsigned_offset_present.patch
+# 0056-backport-LD_SCRIPT-changes-from-535.230.02.patch
+# 0057-backport-uvm-fixes-from-535.230.02.patch
+# 0058-backport-warning-fixes-from-565.57.01.patch
+# 0059-backport-uvm-warning-fixes-from-550.90.07.patch
+# 
+# # build system updates
+# conftest-verbose.patch
+# use-kbuild-compiler.patch
+# use-kbuild-flags.patch
+# conftest-prefer-arch-headers.patch
+
+%patch -P37 -p1 -d kernel/
+%patch -P43 -p1 -d kernel/
+%patch -P45 -p1 -d kernel/
+%patch -P46 -p1 -d kernel/
+%patch -P47 -p1 -d kernel/
+%patch -P48 -p1 -d kernel/
+%patch -P49 -p1 -d kernel/
+%patch -P491 -p1 -d kernel/
+%patch -P50 -p1 -d kernel/
+%patch -P51 -p1 -d kernel/
+%patch -P52 -p1 -d kernel/
+%patch -P53 -p1 -d kernel/
+%patch -P54 -p1 -d kernel/
+%patch -P55 -p1 -d kernel/
+%patch -P56 -p1 -d kernel/
+%patch -P57 -p1 -d kernel/
+%patch -P58 -p1 -d kernel/
+%patch -P59 -p1 -d kernel/
+
 %patch -P0 -p1
 %patch -P1 -p1
-%patch -P2 -p1 -d kernel/
-%patch -P3 -p1 -d kernel/
-%patch -P4 -p1 -d kernel/
-%patch -P5 -p1 -d kernel/
-%patch -P6 -p1 -d kernel/
-%patch -P7 -p1
 
 for kernel_version  in %{?kernel_versions} ; do
     cp -a kernel _kmod_build_${kernel_version%%___*}
@@ -88,6 +147,10 @@ done
 %{?akmod_install}
 
 %changelog
+* Sun Feb 23 2025 Sérgio Basto <sergio@serjux.com> - 3:470.256.02-7
+-  Patches to fix kernel-6.13 , copied as is from Debian git repo
+   https://salsa.debian.org/nvidia-team/nvidia-graphics-drivers/-/commits/470
+
 * Wed Jan 29 2025 RPM Fusion Release Engineering <sergiomb@rpmfusion.org> - 3:470.256.02-6
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_42_Mass_Rebuild
 

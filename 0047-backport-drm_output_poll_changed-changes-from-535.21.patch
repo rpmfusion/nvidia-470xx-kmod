@@ -1,8 +1,20 @@
-diff -uNrp a/conftest.sh b/conftest.sh
---- a/conftest.sh	2024-05-02 15:25:33.000000000 +0100
-+++ b/conftest.sh	2024-12-13 13:54:11.908441973 +0000
-@@ -5055,6 +5055,30 @@ compile_test() {
-             compile_check_conftest "$CODE" "NV_DRM_UNLOCKED_IOCTL_FLAG_PRESENT" "" "types"
+From 4744e22453573cc90f2a13505fa115422bfee499 Mon Sep 17 00:00:00 2001
+From: Andreas Beckmann <anbe@debian.org>
+Date: Sun, 8 Dec 2024 03:13:49 +0100
+Subject: [PATCH] backport drm_output_poll_changed changes from 535.216.01
+
+---
+ conftest.sh                  | 23 +++++++++++++++++++++++
+ nvidia-drm/nvidia-drm-drv.c  |  4 ++++
+ nvidia-drm/nvidia-drm.Kbuild |  1 +
+ 3 files changed, 28 insertions(+)
+
+diff --git a/conftest.sh b/conftest.sh
+index d5a5845d..8ea5a918 100755
+--- a/conftest.sh
++++ b/conftest.sh
+@@ -5035,6 +5035,29 @@ compile_test() {
+             compile_check_conftest "$CODE" "NV_DRM_DRIVER_HAS_DUMB_DESTROY" "" "types"
          ;;
  
 +        drm_output_poll_changed)
@@ -26,16 +38,16 @@ diff -uNrp a/conftest.sh b/conftest.sh
 +            }"
 +
 +            compile_check_conftest "$CODE" "NV_DRM_OUTPUT_POLL_CHANGED_PRESENT" "" "types"
-+         ;;
++        ;;
 +
-+
-         # When adding a new conftest entry, please use the correct format for
-         # specifying the relevant upstream Linux kernel commit.
-         #
-diff -uNrp a/nvidia-drm/nvidia-drm-drv.c b/nvidia-drm/nvidia-drm-drv.c
---- a/nvidia-drm/nvidia-drm-drv.c	2024-05-02 15:50:00.000000000 +0100
-+++ b/nvidia-drm/nvidia-drm-drv.c	2024-12-13 13:54:11.909442018 +0000
-@@ -88,6 +88,7 @@ static struct nv_drm_device *dev_list =
+         drm_unlocked_ioctl_flag_present)
+             # Determine if DRM_UNLOCKED IOCTL flag is present.
+             #
+diff --git a/nvidia-drm/nvidia-drm-drv.c b/nvidia-drm/nvidia-drm-drv.c
+index f3501345..c271f1ae 100644
+--- a/nvidia-drm/nvidia-drm-drv.c
++++ b/nvidia-drm/nvidia-drm-drv.c
+@@ -88,6 +88,7 @@ static struct nv_drm_device *dev_list = NULL;
  
  #if defined(NV_DRM_ATOMIC_MODESET_AVAILABLE)
  
@@ -43,7 +55,7 @@ diff -uNrp a/nvidia-drm/nvidia-drm-drv.c b/nvidia-drm/nvidia-drm-drv.c
  static void nv_drm_output_poll_changed(struct drm_device *dev)
  {
      struct drm_connector *connector = NULL;
-@@ -131,6 +132,7 @@ static void nv_drm_output_poll_changed(s
+@@ -131,6 +132,7 @@ static void nv_drm_output_poll_changed(struct drm_device *dev)
      nv_drm_connector_list_iter_end(&conn_iter);
  #endif
  }
@@ -51,7 +63,7 @@ diff -uNrp a/nvidia-drm/nvidia-drm-drv.c b/nvidia-drm/nvidia-drm-drv.c
  
  static struct drm_framebuffer *nv_drm_framebuffer_create(
      struct drm_device *dev,
-@@ -168,7 +170,9 @@ static const struct drm_mode_config_func
+@@ -168,7 +170,9 @@ static const struct drm_mode_config_funcs nv_mode_config_funcs = {
      .atomic_check  = nv_drm_atomic_check,
      .atomic_commit = nv_drm_atomic_commit,
  
@@ -61,11 +73,15 @@ diff -uNrp a/nvidia-drm/nvidia-drm-drv.c b/nvidia-drm/nvidia-drm-drv.c
  };
  
  static void nv_drm_event_callback(const struct NvKmsKapiEvent *event)
-diff -uNrp a/nvidia-drm/nvidia-drm.Kbuild b/nvidia-drm/nvidia-drm.Kbuild
---- a/nvidia-drm/nvidia-drm.Kbuild	2024-05-02 15:28:12.000000000 +0100
-+++ b/nvidia-drm/nvidia-drm.Kbuild	2024-12-13 13:54:11.909442018 +0000
-@@ -122,3 +122,4 @@ NV_CONFTEST_TYPE_COMPILE_TESTS += drm_co
+diff --git a/nvidia-drm/nvidia-drm.Kbuild b/nvidia-drm/nvidia-drm.Kbuild
+index af3f4af3..beec8bdc 100644
+--- a/nvidia-drm/nvidia-drm.Kbuild
++++ b/nvidia-drm/nvidia-drm.Kbuild
+@@ -122,3 +122,4 @@ NV_CONFTEST_TYPE_COMPILE_TESTS += drm_connector_has_override_edid
  NV_CONFTEST_TYPE_COMPILE_TESTS += vm_area_struct_has_const_vm_flags
  NV_CONFTEST_TYPE_COMPILE_TESTS += drm_driver_has_dumb_destroy
  NV_CONFTEST_TYPE_COMPILE_TESTS += drm_unlocked_ioctl_flag_present
 +NV_CONFTEST_TYPE_COMPILE_TESTS += drm_output_poll_changed
+-- 
+2.39.5
+
