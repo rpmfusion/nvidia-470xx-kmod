@@ -7,12 +7,13 @@
 %global buildforkernels akmod
 %endif
 %global debug_package %{nil}
+%global _kmodtool_zipmodules 0
 
 Name:          nvidia-470xx-kmod
 Epoch:         3
 Version:       470.256.02
 # Taken over by kmodtool
-Release:       7%{?dist}
+Release:       8%{?dist}
 
 License:       Redistributable, no modification permitted
 Summary:       NVIDIA 470xx display driver kernel module
@@ -21,6 +22,7 @@ URL:           https://www.nvidia.com/
 Source11:      nvidia-470xx-kmodtool-excludekernel-filterfile
 Patch0:        gcc-14.patch
 Patch1:        nvidia-UBSAN.patch
+Patch2:        remove_unused_date.patch
 Patch37:       0037-import-pfn_valid-w-o-GPL-rcu_read_lock-unlock-from-v.patch
 Patch43:       0043-backport-follow_pfn-changes-from-550.90.07.patch
 Patch45:       0045-let-the-virt_addr_valid-macro-use-nv_pfn_valid-on-pp.patch
@@ -116,6 +118,7 @@ tar --use-compress-program xz -xf %{_datadir}/%{name}-%{version}/%{name}-%{versi
 
 %patch -P0 -p1
 %patch -P1 -p1
+%patch -P2 -p1
 
 for kernel_version  in %{?kernel_versions} ; do
     cp -a kernel _kmod_build_${kernel_version%%___*}
@@ -147,6 +150,9 @@ done
 %{?akmod_install}
 
 %changelog
+* Thu Mar 06 2025 Leigh Scott <leigh123linux@gmail.com> - 3:470.256.02-8
+- Fix build
+
 * Sun Feb 23 2025 Sérgio Basto <sergio@serjux.com> - 3:470.256.02-7
 -  Patches to fix kernel-6.13 , copied as is from Debian git repo
    https://salsa.debian.org/nvidia-team/nvidia-graphics-drivers/-/commits/470
