@@ -13,7 +13,7 @@ Name:          nvidia-470xx-kmod
 Epoch:         3
 Version:       470.256.02
 # Taken over by kmodtool
-Release:       8%{?dist}
+Release:       9%{?dist}
 
 License:       Redistributable, no modification permitted
 Summary:       NVIDIA 470xx display driver kernel module
@@ -125,6 +125,7 @@ for kernel_version  in %{?kernel_versions} ; do
 done
 
 %build
+export CC+=" -std=gnu17"
 %if 0%{?_without_nvidia_uvm:1}
 export NV_EXCLUDE_KERNEL_MODULES="${NV_EXCLUDE_KERNEL_MODULES} nvidia_uvm "
 %endif
@@ -150,6 +151,9 @@ done
 %{?akmod_install}
 
 %changelog
+* Fri Apr 11 2025 Leigh Scott <leigh123linux@gmail.com> - 3:470.256.02-9
+- Force build to use std=gnu17
+
 * Thu Mar 06 2025 Leigh Scott <leigh123linux@gmail.com> - 3:470.256.02-8
 - Fix build
 
