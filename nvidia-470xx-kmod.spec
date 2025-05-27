@@ -13,7 +13,7 @@ Name:          nvidia-470xx-kmod
 Epoch:         3
 Version:       470.256.02
 # Taken over by kmodtool
-Release:       9%{?dist}
+Release:       10%{?dist}
 
 License:       Redistributable, no modification permitted
 Summary:       NVIDIA 470xx display driver kernel module
@@ -23,6 +23,7 @@ Source11:      nvidia-470xx-kmodtool-excludekernel-filterfile
 Patch0:        gcc-14.patch
 Patch1:        nvidia-UBSAN.patch
 Patch2:        remove_unused_date.patch
+Patch36:       nvidia-470xx-fix-linux-6.15.patch
 Patch37:       0037-import-pfn_valid-w-o-GPL-rcu_read_lock-unlock-from-v.patch
 Patch43:       0043-backport-follow_pfn-changes-from-550.90.07.patch
 Patch45:       0045-let-the-virt_addr_valid-macro-use-nv_pfn_valid-on-pp.patch
@@ -97,6 +98,7 @@ tar --use-compress-program xz -xf %{_datadir}/%{name}-%{version}/%{name}-%{versi
 # use-kbuild-flags.patch
 # conftest-prefer-arch-headers.patch
 
+%patch -P36 -p1 -d kernel/
 %patch -P37 -p1 -d kernel/
 %patch -P43 -p1 -d kernel/
 %patch -P45 -p1 -d kernel/
@@ -151,6 +153,9 @@ done
 %{?akmod_install}
 
 %changelog
+* Tue May 27 2025 Leigh Scott <leigh123linux@gmail.com> - 3:470.256.02-10
+- Patch for 6.15 kernel
+
 * Fri Apr 11 2025 Leigh Scott <leigh123linux@gmail.com> - 3:470.256.02-9
 - Force build to use std=gnu17
 
