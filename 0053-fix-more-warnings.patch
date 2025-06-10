@@ -1,11 +1,10 @@
-From 6878636ece887d7062f02bbe4c583ddbac0e2af0 Mon Sep 17 00:00:00 2001
+From 4b51793c96f8d6bbe8418020b16ad05beb53738e Mon Sep 17 00:00:00 2001
 From: Andreas Beckmann <anbe@debian.org>
 Date: Sun, 8 Dec 2024 22:13:22 +0100
 Subject: [PATCH] fix more warnings
 
 ---
  common/inc/nv-linux.h                 | 8 ++++++++
- common/inc/nv-proto.h                 | 2 +-
  nvidia-drm/nvidia-drm-crtc.c          | 2 ++
  nvidia-modeset/nvidia-modeset-linux.c | 1 +
  nvidia/nv-dma.c                       | 1 +
@@ -13,7 +12,7 @@ Subject: [PATCH] fix more warnings
  nvidia/nv-frontend.h                  | 3 +++
  nvidia/nv-mmap.c                      | 1 +
  nvidia/nv.c                           | 1 +
- 9 files changed, 18 insertions(+), 3 deletions(-)
+ 8 files changed, 17 insertions(+), 2 deletions(-)
 
 diff --git a/common/inc/nv-linux.h b/common/inc/nv-linux.h
 index d22f9dc5..b05f88f7 100644
@@ -58,19 +57,6 @@ index d22f9dc5..b05f88f7 100644
      }
  
  #define NV_KFREE(ptr, size) \
-diff --git a/common/inc/nv-proto.h b/common/inc/nv-proto.h
-index 79cccfa1..8ddae2eb 100644
---- a/common/inc/nv-proto.h
-+++ b/common/inc/nv-proto.h
-@@ -37,7 +37,7 @@ void        nv_procfs_remove_gpu        (nv_linux_state_t *);
- 
- int         nvidia_mmap                 (struct file *, struct vm_area_struct *);
- int         nvidia_mmap_helper          (nv_state_t *, nv_linux_file_private_t *, nvidia_stack_t *, struct vm_area_struct *, void *);
--int         nv_encode_caching           (pgprot_t *, NvU32, NvU32);
-+int         nv_encode_caching           (pgprot_t *, NvU32, nv_memory_type_t);
- void        nv_revoke_gpu_mappings_locked(nv_state_t *);
- 
- NvUPtr      nv_vm_map_pages             (struct page **, NvU32, NvBool);
 diff --git a/nvidia-drm/nvidia-drm-crtc.c b/nvidia-drm/nvidia-drm-crtc.c
 index 8a9ea276..33bdef05 100644
 --- a/nvidia-drm/nvidia-drm-crtc.c
