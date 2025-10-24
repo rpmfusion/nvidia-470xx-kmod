@@ -13,7 +13,7 @@ Name:          nvidia-470xx-kmod
 Epoch:         3
 Version:       470.256.02
 # Taken over by kmodtool
-Release:       11%{?dist}
+Release:       12%{?dist}
 
 License:       Redistributable, no modification permitted
 Summary:       NVIDIA 470xx display driver kernel module
@@ -45,6 +45,7 @@ Patch64:    0064-backport-drm_driver_has_date-from-570.124.04.patch
 Patch65:    0065-backport-ccflags-y-changes-from-570.153.02.patch
 Patch66:    0066-backport-nv_timer_delete_sync-changes-from-570.153.0.patch
 Patch67:    0067-backport-drm_connector_helper_funcs_mode_valid_has_c.patch
+Patch68:    drm_format_info.patch
 
 Patch0:  gcc-14.patch
 Patch1:  nvidia-UBSAN.patch
@@ -107,6 +108,9 @@ done
 %{?akmod_install}
 
 %changelog
+* Fri Oct 24 2025 Sérgio Basto <sergio@serjux.com> - 3:470.256.02-12
+- Support kernel 6.17
+
 * Sun Jul 27 2025 RPM Fusion Release Engineering <sergiomb@rpmfusion.org> - 3:470.256.02-11
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_43_Mass_Rebuild
 
