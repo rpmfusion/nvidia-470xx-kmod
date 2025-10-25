@@ -13,7 +13,7 @@ Name:          nvidia-470xx-kmod
 Epoch:         3
 Version:       470.256.02
 # Taken over by kmodtool
-Release:       12%{?dist}
+Release:       13%{?dist}
 
 License:       Redistributable, no modification permitted
 Summary:       NVIDIA 470xx display driver kernel module
@@ -108,6 +108,9 @@ done
 %{?akmod_install}
 
 %changelog
+* Sat Oct 25 2025 RPM Fusion - 3:470.256.02-13
+- Fix 6.17 patch
+
 * Fri Oct 24 2025 Sérgio Basto <sergio@serjux.com> - 3:470.256.02-12
 - Support kernel 6.17
 
