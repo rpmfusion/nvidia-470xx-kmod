@@ -45,11 +45,11 @@ Patch64:    0064-backport-drm_driver_has_date-from-570.124.04.patch
 Patch65:    0065-backport-ccflags-y-changes-from-570.153.02.patch
 Patch66:    0066-backport-nv_timer_delete_sync-changes-from-570.153.0.patch
 Patch67:    0067-backport-drm_connector_helper_funcs_mode_valid_has_c.patch
-Patch68:    drm_format_info.patch
+Patch71:    0071-backport-nv_vma_start_write-changes-from-570.169.patch
+Patch74:    0074-backport-drm_fb_create_takes_format_info-changes-fro.patch
 
 Patch0:  gcc-14.patch
 Patch1:  nvidia-UBSAN.patch
-Patch2:  linux-6.15-Workaround-nv_vm_flags_-calling-GPL-only-code.patch
 
 # needed for plague to make sure it builds for i586 and i686
 ExclusiveArch:  x86_64
