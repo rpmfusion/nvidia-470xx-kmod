@@ -13,7 +13,7 @@ Name:          nvidia-470xx-kmod
 Epoch:         3
 Version:       470.256.02
 # Taken over by kmodtool
-Release:       15%{?dist}
+Release:       16%{?dist}
 
 License:       Redistributable, no modification permitted
 Summary:       NVIDIA 470xx display driver kernel module
@@ -45,11 +45,15 @@ Patch64:    0064-backport-drm_driver_has_date-from-570.124.04.patch
 Patch65:    0065-backport-ccflags-y-changes-from-570.153.02.patch
 Patch66:    0066-backport-nv_timer_delete_sync-changes-from-570.153.0.patch
 Patch67:    0067-backport-drm_connector_helper_funcs_mode_valid_has_c.patch
-Patch71:    0071-backport-nv_vma_start_write-changes-from-570.169.patch
+#Patch71:    0071-backport-nv_vma_start_write-changes-from-570.169.patch
 Patch74:    0074-backport-drm_fb_create_takes_format_info-changes-fro.patch
 
 Patch0:  gcc-14.patch
 Patch1:  nvidia-UBSAN.patch
+Patch101:  nvidia-470xx-fix-linux-6.15.patch
+Patch102:  nvidia-470xx-fix-linux-6.19-part1.patch
+Patch103:  nvidia-470xx-fix-linux-6.19-part2.patch
+Patch104:  nvidia-470xx-MODULE_DESCRIPTION.patch
 
 # needed for plague to make sure it builds for i586 and i686
 ExclusiveArch:  x86_64
@@ -82,7 +86,7 @@ for kernel_version  in %{?kernel_versions} ; do
 done
 
 %build
-export CC+=" -std=gnu17"
+export CC+=" -std=gnu17 -fms-extensions"
 %if 0%{?_without_nvidia_uvm:1}
 export NV_EXCLUDE_KERNEL_MODULES="${NV_EXCLUDE_KERNEL_MODULES} nvidia_uvm "
 %endif
@@ -108,6 +112,9 @@ done
 %{?akmod_install}
 
 %changelog
+* Sun Feb 15 2026 Sérgio Basto <sergio@serjux.com> - 3:470.256.02-16
+- Fixes for Kernel 6.19
+
 * Mon Feb 02 2026 RPM Fusion Release Engineering <sergiomb@rpmfusion.org> - 3:470.256.02-15
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_44_Mass_Rebuild
 
