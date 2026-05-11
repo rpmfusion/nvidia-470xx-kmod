@@ -12,13 +12,14 @@ Name:          nvidia-470xx-kmod
 Epoch:         3
 Version:       470.256.02
 # Taken over by kmodtool
-Release:       17%{?dist}
+Release:       18%{?dist}
 
 License:       Redistributable, no modification permitted
 Summary:       NVIDIA 470xx display driver kernel module
 URL:           https://www.nvidia.com/
 
 Source11:      nvidia-470xx-kmodtool-excludekernel-filterfile
+Patch23:       0023-backport-vm_area_struct_has_const_vm_flags-changes-f.patch
 Patch37:       0037-import-pfn_valid-w-o-GPL-rcu_read_lock-unlock-from-v.patch
 Patch43:       0043-backport-follow_pfn-changes-from-550.90.07.patch
 Patch45:       0045-let-the-virt_addr_valid-macro-use-nv_pfn_valid-on-pp.patch
@@ -40,20 +41,30 @@ Patch58:       0058-backport-warning-fixes-from-565.57.01.patch
 Patch59:       0059-backport-uvm-warning-fixes-from-550.90.07.patch
 Patch60:    0060-backport-build_cflags-changes-from-525.85.05.patch
 Patch61:    0061-backport-drm_gem_object_vmap_has_map_arg-changes-fro.patch
+Patch63:    0063-backport-conftest.sh-comment-changes-from-515.48.07.patch
+Patch631:   0063-backport-conftest.sh-comment-changes-from-525.53.patch
+Patch632:   0063-backport-conftest.sh-comment-changes-from-545.23.06.patch
 Patch64:    0064-backport-drm_driver_has_date-from-570.124.04.patch
 Patch65:    0065-backport-ccflags-y-changes-from-570.153.02.patch
 Patch66:    0066-backport-nv_timer_delete_sync-changes-from-570.153.0.patch
 Patch67:    0067-backport-drm_connector_helper_funcs_mode_valid_has_c.patch
-#Patch71:    0071-backport-nv_vma_start_write-changes-from-570.169.patch
+Patch71:    0071-backport-nv_vma_start_write-changes-from-570.169.patch
 Patch74:    0074-backport-drm_fb_create_takes_format_info-changes-fro.patch
+Patch75:    0075-backport-drm_print.h-changes-from-570.211.01.patch
+Patch76:    0076-backport-nv_in_hardirq-changes-from-580.119.02.patch
+Patch77:    0077-backport-vma_flags_set_word-changes-from-580.126.09.patch
+Patch78:    0078-backport-vma_flags_set_word-changes-from-580.126.09-.patch
+Patch79:    0079-backport-dma_map_ops_has_map_phys-changes-from-580.1.patch
+Patch80:    0080-backport-for_each_-_plane_in_state-changes-from-580..patch
+Patch81:    0081-support-fallback-for-for_each_-_plane_in_state.patch
+Patch82:    0082-backport-for_each_-_crtc_in_state-changes-from-580.1.patch
+Patch83:    0083-support-fallback-for-for_each_-_crtc_in_state.patch
+Patch84:    nvidia-470xx-VMA_LOCK_OFFSET.patch
 
 Patch0:  gcc-14.patch
 Patch1:  nvidia-UBSAN.patch
-Patch101:  nvidia-470xx-fix-linux-6.15.patch
-Patch102:  nvidia-470xx-fix-linux-6.19-part1.patch
-Patch103:  nvidia-470xx-fix-linux-6.19-part2.patch
 Patch104:  nvidia-470xx-MODULE_DESCRIPTION.patch
-Patch105:    https://github.com/joanbm/nvidia-470xx-linux-mainline/raw/master/patches/nvidia-470xx-fix-linux-7.0.patch
+Patch106:  nvidia-470xx-fix-linux-7.0.patch
 
 # needed for plague to make sure it builds for i586 and i686
 ExclusiveArch:  x86_64
@@ -112,6 +123,9 @@ done
 %{?akmod_install}
 
 %changelog
+* Mon May 11 2026 Sérgio Basto <sergio@serjux.com> - 3:470.256.02-18
+- Debian sync
+
 * Sun May 10 2026 Sérgio Basto <sergio@serjux.com> - 3:470.256.02-17
 - Add patch for kernel-7.0
 
