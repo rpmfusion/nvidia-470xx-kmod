@@ -12,7 +12,7 @@ Name:          nvidia-470xx-kmod
 Epoch:         3
 Version:       470.256.02
 # Taken over by kmodtool
-Release:       20%{?dist}
+Release:       21%{?dist}
 
 License:       Redistributable, no modification permitted
 Summary:       NVIDIA 470xx display driver kernel module
@@ -66,6 +66,7 @@ Patch1:  nvidia-UBSAN.patch
 Patch104:  nvidia-470xx-MODULE_DESCRIPTION.patch
 Patch106:  nvidia-470xx-fix-linux-7.0.patch
 Patch107:  nvidia-470xx-fix-linux-7.2.v5.patch
+Patch108:  nvidia-470xx-fix-linux-7.3.patch
 
 # needed for plague to make sure it builds for i586 and i686
 ExclusiveArch:  x86_64
@@ -124,6 +125,9 @@ done
 %{?akmod_install}
 
 %changelog
+* Wed Sep 02 2026 Sérgio Basto <sergio@serjux.com> - 3:470.256.02-21
+- Quick fix for linux-7.3
+
 * Mon Aug 31 2026 Sérgio Basto <sergio@serjux.com> - 3:470.256.02-20
 - Fixes for linux-7.2
 
