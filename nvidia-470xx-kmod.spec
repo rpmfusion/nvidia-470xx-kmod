@@ -18,6 +18,7 @@ License:       Redistributable, no modification permitted
 Summary:       NVIDIA 470xx display driver kernel module
 URL:           https://www.nvidia.com/
 
+Source0:       nvidia-470xx-kmod-470.256.02-x86_64.tar.xz
 Source11:      nvidia-470xx-kmodtool-excludekernel-filterfile
 Patch23:       0023-backport-vm_area_struct_has_const_vm_flags-changes-f.patch
 Patch37:       0037-import-pfn_valid-w-o-GPL-rcu_read_lock-unlock-from-v.patch
@@ -72,7 +73,7 @@ Patch108:  nvidia-470xx-fix-linux-7.3.patch
 ExclusiveArch:  x86_64
 
 # get the needed BuildRequires (in parts depending on what we build for)
-%global AkmodsBuildRequires %{_bindir}/kmodtool, xorg-x11-drv-nvidia-470xx-kmodsrc >= %{epoch}:%{version}
+%global AkmodsBuildRequires %{_bindir}/kmodtool
 BuildRequires:  %{AkmodsBuildRequires}
 
 %{!?kernels:BuildRequires: gcc, elfutils-libelf-devel, buildsys-build-rpmfusion-kerneldevpkgs-%{?buildforkernels:%{buildforkernels}}%{!?buildforkernels:current}-%{_target_cpu} }
@@ -87,8 +88,7 @@ The nvidia 470xx %{version} display driver kernel module for kernel %{kversion}.
 %{?kmodtool_check}
 # print kmodtool output for debugging purposes:
 kmodtool  --target %{_target_cpu}  --repo rpmfusion --kmodname %{name} --filterfile %{SOURCE11} --obsolete-name nvidia --obsolete-version "%{?epoch}:%{version}-%{release}" %{?buildforkernels:--%{buildforkernels}} %{?kernels:--for-kernels "%{?kernels}"} 2>/dev/null
-%setup -T -c
-tar --use-compress-program xz -xf %{_datadir}/%{name}-%{version}/%{name}-%{version}-%{_target_cpu}.tar.xz
+%setup -c -n %{name}-%{version}-%{_target_cpu}.tar.xz
 
 pushd kernel
 %autopatch -p1
