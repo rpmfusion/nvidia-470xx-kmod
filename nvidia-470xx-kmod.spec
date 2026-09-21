@@ -65,8 +65,8 @@ Patch82:    0082-backport-for_each_-_crtc_in_state-changes-from-580.1.patch
 Patch83:    0083-support-fallback-for-for_each_-_crtc_in_state.patch
 Patch84:    0084-backport-vma-locking-changes-from-595.44.03.patch
 
-Patch0:  gcc-14.patch
-Patch1:  nvidia-UBSAN.patch
+Patch90:  gcc-14.patch
+Patch91:  nvidia-UBSAN.patch
 Patch104:  nvidia-470xx-MODULE_DESCRIPTION.patch
 Patch106:  nvidia-470xx-fix-linux-7.0.patch
 Patch107:  nvidia-470xx-fix-linux-7.2.v5.patch
