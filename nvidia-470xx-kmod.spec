@@ -19,8 +19,12 @@ Summary:       NVIDIA 470xx display driver kernel module
 URL:           https://www.nvidia.com/
 
 Source11:      nvidia-470xx-kmodtool-excludekernel-filterfile
+Patch1:        0001-some-power-management-features-were-not-yet-in-Linux.patch
 Patch23:       0023-backport-vm_area_struct_has_const_vm_flags-changes-f.patch
+Patch33:       0033-refuse-to-load-legacy-module-if-IBT-is-enabled.patch
+Patch34:       0034-fix-typos.patch
 Patch37:       0037-import-pfn_valid-w-o-GPL-rcu_read_lock-unlock-from-v.patch
+Patch42:       0042-Log-an-error-message-when-nv_mem_client_init-fails-d.patch
 Patch43:       0043-backport-follow_pfn-changes-from-550.90.07.patch
 Patch45:       0045-let-the-virt_addr_valid-macro-use-nv_pfn_valid-on-pp.patch
 Patch46:       0046-backport-nv_get_kern_phys_address-changes-from-555.4.patch
@@ -59,7 +63,7 @@ Patch80:    0080-backport-for_each_-_plane_in_state-changes-from-580..patch
 Patch81:    0081-support-fallback-for-for_each_-_plane_in_state.patch
 Patch82:    0082-backport-for_each_-_crtc_in_state-changes-from-580.1.patch
 Patch83:    0083-support-fallback-for-for_each_-_crtc_in_state.patch
-Patch84:    nvidia-470xx-VMA_LOCK_OFFSET.patch
+Patch84:    0084-backport-vma-locking-changes-from-595.44.03.patch
 
 Patch0:  gcc-14.patch
 Patch1:  nvidia-UBSAN.patch

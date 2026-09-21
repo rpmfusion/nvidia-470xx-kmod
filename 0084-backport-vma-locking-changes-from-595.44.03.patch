@@ -1,0 +1,126 @@
+From 0000000000000000000000000000000000000001 Mon Sep 17 00:00:00 2001
+From: Dominique Belhachemi <domibel@debian.org>
+Date: Sun, 07 Jun 2026 10:50:36 -0400
+Subject: [PATCH] backport vma locking changes from 595.44.03
+
+Kernel 7.0 renamed VMA_LOCK_OFFSET to VM_REFCNT_EXCLUDE_READERS_FLAG
+and dropped the mm_lock_seq argument from __is_vma_write_locked().
+
+Backported from open-gpu-kernel-modules 595.44.03:
+  https://github.com/NVIDIA/open-gpu-kernel-modules/commit/667aaff6
+
+Closes: #1135362
+---
+--- a/nvidia/nv-mmap.c
++++ b/nvidia/nv-mmap.c
+@@ -800,15 +800,22 @@ void NV_API_CALL nv_set_safe_to_mmap_locked(
+ }
+ 
+ #if !NV_CAN_CALL_VMA_START_WRITE
++
++#if defined(VM_REFCNT_EXCLUDE_READERS_FLAG)
++#define NV_VMA_LOCK_OFFSET VM_REFCNT_EXCLUDE_READERS_FLAG
++#else
++#define NV_VMA_LOCK_OFFSET VMA_LOCK_OFFSET
++#endif
++
+ static NvBool nv_vma_enter_locked(struct vm_area_struct *vma, NvBool detaching)
+ {
+-    NvU32 tgt_refcnt = VMA_LOCK_OFFSET;
++    NvU32 tgt_refcnt = NV_VMA_LOCK_OFFSET;
+     NvBool interrupted = NV_FALSE;
+     if (!detaching)
+     {
+         tgt_refcnt++;
+     }
+-    if (!refcount_add_not_zero(VMA_LOCK_OFFSET, &vma->vm_refcnt))
++    if (!refcount_add_not_zero(NV_VMA_LOCK_OFFSET, &vma->vm_refcnt))
+     {
+         return NV_FALSE;
+     }
+@@ -838,7 +845,7 @@ static NvBool nv_vma_enter_locked(struct vm_area_struct *vma, NvBool detaching)
+     if (interrupted)
+     {
+         // Clean up on error: release refcount and dep_map
+-        refcount_sub_and_test(VMA_LOCK_OFFSET, &vma->vm_refcnt);
++        refcount_sub_and_test(NV_VMA_LOCK_OFFSET, &vma->vm_refcnt);
+         rwsem_release(&vma->vmlock_dep_map, _RET_IP_);
+         return NV_FALSE;
+     }
+@@ -854,7 +861,7 @@ void nv_vma_start_write(struct vm_area_struct *vma)
+ {
+     NvU32 mm_lock_seq;
+     NvBool locked;
+-    if (__is_vma_write_locked(vma, &mm_lock_seq))
++    if (nv_is_vma_write_locked(vma, &mm_lock_seq))
+         return;
+ 
+     locked = nv_vma_enter_locked(vma, NV_FALSE);
+@@ -863,7 +870,7 @@ void nv_vma_start_write(struct vm_area_struct *vma)
+     if (locked)
+     {
+         NvBool detached;
+-        detached = refcount_sub_and_test(VMA_LOCK_OFFSET, &vma->vm_refcnt);
++        detached = refcount_sub_and_test(NV_VMA_LOCK_OFFSET, &vma->vm_refcnt);
+         rwsem_release(&vma->vmlock_dep_map, _RET_IP_);
+         WARN_ON_ONCE(detached);
+     }
+--- a/common/inc/nv-mm.h
++++ b/common/inc/nv-mm.h
+@@ -276,6 +276,17 @@ static inline void nv_vma_flags_clear_word(struct vm_area_struct *vma, unsigned
+     ACCESS_PRIVATE(vma, __vm_flags) &= ~flags;
+ #endif
+ }
++
++static inline int nv_is_vma_write_locked(struct vm_area_struct *vma,
++                                         unsigned int *mm_lock_seq)
++{
++#if defined(NV_IS_VMA_WRITE_LOCKED_HAS_MM_LOCK_SEQ_ARG)
++    return __is_vma_write_locked(vma, mm_lock_seq);
++#else
++    *mm_lock_seq = __vma_raw_mm_seqnum(vma);
++    return __is_vma_write_locked(vma);
++#endif
++}
+ #endif // !NV_CAN_CALL_VMA_START_WRITE
+ 
+ #include <linux/version.h>
+--- a/conftest.sh
++++ b/conftest.sh
+@@ -1007,6 +1007,26 @@ compile_test() {
+             compile_check_conftest "$CODE" "NV_VM_FAULT_HAS_ADDRESS" "" "types"
+         ;;
+ 
++        is_vma_write_locked_has_mm_lock_seq_arg)
++            #
++            # Determine if __is_vma_write_locked() takes only a single
++            # 'struct vm_area_struct *' argument.
++            #
++            # Removed the 'unsigned int *mm_lock_seq' parameter by commit
++            # 22f7639f2f03 ("mm/vma: improve and document
++            # __is_vma_write_locked()") in v7.0-rc1.
++            #
++            CODE="
++            #include <linux/mm.h>
++            #include <linux/mmap_lock.h>
++            int conftest_is_vma_write_locked_has_mm_lock_seq_arg(struct vm_area_struct *vma) {
++                unsigned int mm_lock_seq;
++                return __is_vma_write_locked(vma, &mm_lock_seq);
++            }"
++
++            compile_check_conftest "$CODE" "NV_IS_VMA_WRITE_LOCKED_HAS_MM_LOCK_SEQ_ARG" "" "types"
++        ;;
++
+         kmem_cache_has_kobj_remove_work)
+             #
+             # Determine if the 'kmem_cache' structure has 'kobj_remove_work'.
+--- a/nvidia/nvidia.Kbuild
++++ b/nvidia/nvidia.Kbuild
+@@ -202,6 +202,7 @@ NV_CONFTEST_TYPE_COMPILE_TESTS += dma_ops
+ NV_CONFTEST_TYPE_COMPILE_TESTS += swiotlb_dma_ops
+ NV_CONFTEST_TYPE_COMPILE_TESTS += noncoherent_swiotlb_dma_ops
+ NV_CONFTEST_TYPE_COMPILE_TESTS += vm_fault_has_address
++NV_CONFTEST_TYPE_COMPILE_TESTS += is_vma_write_locked_has_mm_lock_seq_arg
+ NV_CONFTEST_TYPE_COMPILE_TESTS += backlight_properties_type
+ NV_CONFTEST_TYPE_COMPILE_TESTS += vm_insert_pfn_prot
+ NV_CONFTEST_TYPE_COMPILE_TESTS += vmf_insert_pfn_prot
