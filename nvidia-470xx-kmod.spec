@@ -12,7 +12,7 @@ Name:          nvidia-470xx-kmod
 Epoch:         3
 Version:       470.256.02
 # Taken over by kmodtool
-Release:       21%{?dist}
+Release:       22%{?dist}
 
 License:       Redistributable, no modification permitted
 Summary:       NVIDIA 470xx display driver kernel module
@@ -129,6 +129,14 @@ done
 %{?akmod_install}
 
 %changelog
+* Mon Sep 21 2026 Sérgio Basto <sergio@serjux.com> - 3:470.256.02-22
+- Rename nvidia-470xx-VMA_LOCK_OFFSET.patch to 0084-backport-vma-locking-changes-from-595.44.03.patch and add a fix.
+- Sync more changes with Debian:
+  Add `0001-some-power-management-features-were-not-yet-in-Linux.patch`
+  Add `0033-refuse-to-load-legacy-module-if-IBT-is-enabled.patch`
+  Add `0034-fix-typos.patch`
+  Add `0042-Log-an-error-message-when-nv_mem_client_init-fails-d.patch`
+
 * Wed Sep 02 2026 Sérgio Basto <sergio@serjux.com> - 3:470.256.02-21
 - Quick fix for linux-7.3
 
