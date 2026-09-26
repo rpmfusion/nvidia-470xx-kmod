@@ -136,6 +136,8 @@ done
   Add `0033-refuse-to-load-legacy-module-if-IBT-is-enabled.patch`
   Add `0034-fix-typos.patch`
   Add `0042-Log-an-error-message-when-nv_mem_client_init-fails-d.patch`
+- Rename nvidia-470xx-fix-linux-7.0.patch to 0085-fix-dma-fence-470xx.patch
+  and rename nvidia-470xx-MODULE_DESCRIPTION.patch to 0086-add-MODULE_DESCRIPTION-470xx.patch
 
 * Wed Sep 02 2026 Sérgio Basto <sergio@serjux.com> - 3:470.256.02-21
 - Quick fix for linux-7.3
